@@ -1,56 +1,95 @@
+
 # 📰 News Feed Simulator
 
-Proyek ini adalah simulasi aliran berita (*News Feed*) reaktif yang dibangun menggunakan **Kotlin** dan **Compose Multiplatform**. Aplikasi ini menerapkan arsitektur **MVVM (Model-View-ViewModel)** yang bersih (Clean Architecture) untuk memisahkan logika data dan antarmuka pengguna.
+## Deskripsi Proyek
 
-Proyek ini disusun untuk memenuhi tugas mata kuliah **Pengembangan Aplikasi Mobile - RB**.
+News Feed Simulator merupakan aplikasi simulasi berita yang menampilkan informasi secara dinamis menggunakan Kotlin dan Compose Multiplatform. Aplikasi ini dirancang dengan menerapkan pola arsitektur MVVM (Model-View-ViewModel) untuk memisahkan pengelolaan data, logika aplikasi, dan tampilan antarmuka sehingga struktur kode lebih terorganisasi.
 
-##  Pemenuhan Rubrik Penilaian
+Pengembangan aplikasi ini bertujuan untuk menerapkan konsep pemrograman reaktif, pengelolaan state, serta pemrosesan data secara asynchronous. Proyek ini dibuat sebagai bagian dari penyelesaian tugas mata kuliah **Pengembangan Aplikasi Mobile – Kelas RA**.
 
-Aplikasi ini telah mengimplementasikan seluruh kriteria penilaian tugas:
+## Implementasi Komponen dan Kriteria Penilaian
 
-### 1. Implementasi Flow 
-- **Lokasi:** `data/NewsRepository.kt`
-- **Penjelasan:** Menggunakan *Flow builder* (`flow { ... }`) untuk membuat *stream* data, di mana data berita baru disimulasikan dan dikirim menggunakan `emit()` setiap 2 detik secara terus-menerus.
+### 1. Pengelolaan Data Menggunakan Flow
 
-### 2. Penggunaan Operators 
-- **Lokasi:** `ui/NewsFeedScreen.kt` dan `presentation/NewsFeedViewModel.kt`
-- **Penjelasan:** - `onEach`: Digunakan di dalam ViewModel untuk memantau aliran *flow* dan menambahkan berita baru ke *state list* setiap kali ada data yang di-*emit*.
-    - `filter`: Digunakan di UI untuk menyaring daftar berita berdasarkan kategori yang sedang dipilih oleh pengguna (Tech, Sports, dll).
-    - `map`: Digunakan untuk mentransformasi format data mentah menjadi format *display* (menambahkan tag kategori di depan judul berita).
+**Lokasi:** `data/NewsRepository.kt`
 
-### 3. StateFlow Implementation 
-- **Lokasi:** `presentation/NewsFeedViewModel.kt`
-- **Penjelasan:** Menggunakan `MutableStateFlow` dan `.asStateFlow()` untuk mengelola *state* yang reaktif secara aman. *State* yang dikelola meliputi:
-    - `readCount`: Menyimpan jumlah berita yang sudah diklik/dibaca.
-    - `selectedCategory`: Menyimpan status tab filter kategori yang aktif.
-    - `allNews`: Menyimpan daftar seluruh berita yang telah masuk dari *repository*.
+Komponen Flow digunakan untuk menghasilkan aliran data berita secara berkelanjutan. Melalui fungsi `flow { ... }`, aplikasi mensimulasikan kemunculan berita baru dan mengirimkannya menggunakan `emit()`. Data tersebut diperbarui secara berkala setiap dua detik sehingga pengguna dapat melihat perubahan informasi secara langsung.
 
-### 4. Coroutines Usage 
-- **Lokasi:** `presentation/NewsFeedViewModel.kt`
-- **Penjelasan:** Menggunakan `scope.launch` untuk menjalankan *Coroutines*. Di dalamnya, terdapat simulasi pemanggilan jaringan asinkron (mengambil detail berita) menggunakan `async(Dispatchers.Default)` dan menunggunya dengan `await()` tanpa memblokir *Thread* utama (UI).
+### 2. Penerapan Flow Operators
 
-### 5. Kode dan Dokumentasi 
-- **Lokasi:** Seluruh *source code*.
-- **Penjelasan:** Mengimplementasikan *Clean Code* dengan memisahkan kode ke dalam *package* yang terstruktur: `model` (struktur data), `data` (sumber data/repository), `presentation` (ViewModel dan *state*), serta `ui` (Jetpack Compose Screen).
+**Lokasi:** `ui/NewsFeedScreen.kt` dan `presentation/NewsFeedViewModel.kt`
+
+Beberapa operator digunakan untuk mengolah aliran data sebelum ditampilkan kepada pengguna, yaitu:
+
+- **`onEach`**: Menjalankan proses tambahan setiap kali data berita diterima. Berita yang masuk kemudian ditambahkan ke dalam daftar state pada ViewModel.
+- **`filter`**: Memilih berita berdasarkan kategori yang ditentukan melalui menu filter, seperti Tech, Sports, Business, dan Entertainment.
+- **`map`**: Mengubah data berita ke dalam format yang diperlukan oleh antarmuka, termasuk menambahkan informasi kategori pada judul berita.
+
+### 3. Pengelolaan State dengan StateFlow
+
+**Lokasi:** `presentation/NewsFeedViewModel.kt`
+
+State aplikasi dikelola menggunakan `MutableStateFlow` dan diekspos melalui `asStateFlow()`. Pendekatan ini memungkinkan perubahan data diamati oleh antarmuka secara reaktif, sekaligus membatasi akses langsung terhadap state yang dikelola ViewModel.
+
+Data yang disimpan meliputi:
+
+- **`readCount`**: Mencatat jumlah berita yang telah dibuka atau dibaca oleh pengguna.
+- **`selectedCategory`**: Menyimpan kategori berita yang sedang dipilih.
+- **`allNews`**: Menampung kumpulan berita yang diterima dari repository.
+
+### 4. Pemanfaatan Coroutines
+
+**Lokasi:** `presentation/NewsFeedViewModel.kt`
+
+Kotlin Coroutines digunakan untuk menjalankan proses asynchronous melalui `scope.launch`. Pada bagian pengambilan detail berita, aplikasi memanfaatkan `async(Dispatchers.Default)` untuk menjalankan pekerjaan secara asynchronous, kemudian menggunakan `await()` untuk memperoleh hasilnya.
+
+Dengan pendekatan ini, proses pengolahan data dapat berlangsung tanpa harus memblokir thread utama yang menangani antarmuka pengguna.
+
+### 5. Struktur Kode dan Dokumentasi
+
+**Lokasi:** Seluruh source code proyek.
+
+Kode program disusun ke dalam beberapa package berdasarkan tanggung jawab masing-masing komponen. Pemisahan ini mendukung penerapan prinsip Clean Code dan memudahkan proses pemeliharaan maupun pengembangan aplikasi.
+
+Struktur package yang digunakan terdiri dari:
+
+- **`model`**: Mendefinisikan struktur dan representasi data berita.
+- **`data`**: Mengelola sumber data serta proses penyediaan berita melalui repository.
+- **`presentation`**: Menangani ViewModel dan state aplikasi.
+- **`ui`**: Berisi komponen antarmuka yang dibangun menggunakan Jetpack Compose.
 
 ---
 
-##  Cara Menjalankan Aplikasi (Langkah-langkah)
+## Panduan Menjalankan Aplikasi
 
-Karena proyek ini menggunakan basis **Compose Multiplatform**, aplikasi akan berjalan sebagai aplikasi Desktop. Berikut adalah panduan langkah demi langkah untuk menjalankannya:
+Aplikasi ini dikembangkan menggunakan Compose Multiplatform dan menyediakan target desktop. Berikut tahapan untuk menjalankannya:
 
-1. **Persiapan IDE:** Pastikan Anda menggunakan **Android Studio** atau **IntelliJ IDEA** versi terbaru.
-2. **Buka Proyek:** Pilih menu `File > Open...` dan arahkan ke folder proyek `NewsFeedSimulator` ini.
-3. **Tunggu Gradle Sync:** Perhatikan bagian pojok kanan bawah IDE. Tunggu hingga proses sinkronisasi Gradle selesai sepenuhnya (mengunduh *dependencies* Kotlin, Coroutines, dan Compose).
-4. **Jalankan Aplikasi:** Klik tombol **Run** (segitiga hijau) atau tekan `Shift + F10`.
-5. **Simulasi Berjalan:** Jendela aplikasi Desktop akan terbuka. Anda akan melihat berita baru masuk secara otomatis setiap 2 detik. Cobalah klik filter kategori di bagian atas, dan klik salah satu *card* berita untuk melihat *counter* "Dibaca" bertambah.
+1. **Persiapkan IDE**  
+   Gunakan Android Studio atau IntelliJ IDEA yang mendukung proyek Kotlin dan Compose Multiplatform.
+
+2. **Buka proyek**  
+   Pilih menu `File > Open...`, kemudian tentukan direktori utama proyek News Feed Simulator.
+
+3. **Tunggu proses Gradle Sync**  
+   Biarkan IDE menyelesaikan sinkronisasi Gradle, termasuk proses pemuatan dependensi yang dibutuhkan oleh Kotlin, Coroutines, dan Compose.
+
+4. **Jalankan program**  
+   Setelah proses sinkronisasi selesai, jalankan konfigurasi aplikasi melalui tombol Run atau gunakan shortcut `Shift + F10`.
+
+5. **Uji fitur aplikasi**  
+   Setelah jendela aplikasi tampil, amati penambahan berita secara otomatis dalam interval dua detik. Pengguna juga dapat memilih kategori melalui menu filter dan membuka kartu berita untuk melihat perubahan jumlah berita yang telah dibaca.
 
 ---
-**Dikerjakan Oleh:**
-- **Nama:** Pradana Figo Ariasya
-- **NIM:** 123140063
-- **Mata Kuliah:** Pengembangan Aplikasi Mobile RB
 
-**Screenshoot:**
-<img width="1021" height="753" alt="image" src="https://github.com/user-attachments/assets/0bd9394d-b334-4670-a5ab-e63bee89b2e9" />
+## Identitas Pengembang
+
+- **Nama:** Hildyah Maretasya Araffad
+- **NIM:** 123140151
+- **Kelas:** RA
+- **Mata Kuliah:** Pengembangan Aplikasi Mobile
+
+---
+
+## Screenshot Aplikasi
+<img width="587" height="440" alt="image" src="https://github.com/user-attachments/assets/594946c5-efb9-4c1c-9ae7-f6f19a43cead" />
 
