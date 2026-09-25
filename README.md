@@ -1,6 +1,12 @@
+# News Feed Simulator
+---
+## Identitas Pengembang
 
-# 📰 News Feed Simulator
-
+- **Nama:** Hildyah Maretasya Araffad
+- **NIM:** 123140151
+- **Kelas:** RA
+- **Mata Kuliah:** Pengembangan Aplikasi Mobile
+---
 ## Deskripsi Proyek
 
 News Feed Simulator merupakan aplikasi simulasi berita yang menampilkan informasi secara dinamis menggunakan Kotlin dan Compose Multiplatform. Aplikasi ini dirancang dengan menerapkan pola arsitektur MVVM (Model-View-ViewModel) untuk memisahkan pengelolaan data, logika aplikasi, dan tampilan antarmuka sehingga struktur kode lebih terorganisasi.
@@ -78,15 +84,6 @@ Aplikasi ini dikembangkan menggunakan Compose Multiplatform dan menyediakan targ
 
 5. **Uji fitur aplikasi**  
    Setelah jendela aplikasi tampil, amati penambahan berita secara otomatis dalam interval dua detik. Pengguna juga dapat memilih kategori melalui menu filter dan membuka kartu berita untuk melihat perubahan jumlah berita yang telah dibaca.
-
----
-
-## Identitas Pengembang
-
-- **Nama:** Hildyah Maretasya Araffad
-- **NIM:** 123140151
-- **Kelas:** RA
-- **Mata Kuliah:** Pengembangan Aplikasi Mobile
 
 ---
 
