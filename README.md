@@ -92,4 +92,5 @@ Aplikasi ini dikembangkan menggunakan Compose Multiplatform dan menyediakan targ
 
 ## Screenshot Aplikasi
 <img width="587" height="440" alt="image" src="https://github.com/user-attachments/assets/594946c5-efb9-4c1c-9ae7-f6f19a43cead" />
+<img width="589" height="439" alt="image" src="https://github.com/user-attachments/assets/9cd6e18a-50de-44fc-89c7-5aa6108522a0" />
 
